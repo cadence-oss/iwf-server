@@ -15,6 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+// TODO: create greedy tests by copying these 4 tests and pass in OptimizeTimer: true
 func TestTimerWorkflowTemporal(t *testing.T) {
 	if !*temporalIntegTest {
 		t.Skip()
@@ -46,6 +47,47 @@ func TestTimerWorkflowTemporalContinueAsNew(t *testing.T) {
 }
 
 func TestTimerWorkflowCadenceContinueAsNew(t *testing.T) {
+	if !*cadenceIntegTest {
+		t.Skip()
+	}
+	for i := 0; i < *repeatIntegTest; i++ {
+		doTestTimerWorkflow(t, service.BackendTypeCadence, minimumContinueAsNewConfigV0())
+		smallWaitForFastTest()
+	}
+}
+
+// TODO: create greedy tests by copying these 4 tests and pass in OptimizeTimer: true
+func TestGreedyTimerWorkflowTemporal(t *testing.T) {
+	if !*temporalIntegTest {
+		t.Skip()
+	}
+	for i := 0; i < *repeatIntegTest; i++ {
+		doTestTimerWorkflow(t, service.BackendTypeTemporal, minimumGreedyTimerConfig(true, false))
+		smallWaitForFastTest()
+	}
+}
+
+func TestGreedyTimerWorkflowCadence(t *testing.T) {
+	if !*cadenceIntegTest {
+		t.Skip()
+	}
+	for i := 0; i < *repeatIntegTest; i++ {
+		doTestTimerWorkflow(t, service.BackendTypeCadence, minimumGreedyTimerConfig(true, false))
+		smallWaitForFastTest()
+	}
+}
+
+func TestGreedyTimerWorkflowTemporalContinueAsNew(t *testing.T) {
+	if !*temporalIntegTest {
+		t.Skip()
+	}
+	for i := 0; i < *repeatIntegTest; i++ {
+		doTestTimerWorkflow(t, service.BackendTypeTemporal, minimumContinueAsNewConfigV0())
+		smallWaitForFastTest()
+	}
+}
+
+func TestGreedyTimerWorkflowCadenceContinueAsNew(t *testing.T) {
 	if !*cadenceIntegTest {
 		t.Skip()
 	}
